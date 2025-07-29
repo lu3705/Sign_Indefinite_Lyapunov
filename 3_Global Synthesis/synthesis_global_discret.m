@@ -8,13 +8,7 @@ debug = 1;
 %System continu
 Ac = [-0.05 1; -10 -0.5];
 Bc = [0; 1];
-wn = 10;
-
-% K1 = [9.9 0.495];
-% K2 = 0;
-
-K1 = [1.8794   -2.1288];
-K2 = -4.6791;
+wn = 4;
 
 %% Discretize
 
@@ -24,13 +18,15 @@ Ts = 1/(2*fn);
 
 [A,B] = Discretize(Ac,Bc,Ts,debug);
 
-%% Check if it's Schur Cohn
-
-ItsSchurCohn(A, B, K1,debug);
-
 %% LMI
 
-[feas,sol] = Analysis_Global(A, B, K1, K2, debug);
+r = 0.4; %maximo 1
+[feas,sol] = Synthesis_Global(A,B,r,debug, [1e-20, 1e6, 1e-20]);
+
+
+%% Check if it's Schur Cohn
+
+ItsSchurCohn(A, B, sol.K1,debug);
 
 %% Plot traject
 
