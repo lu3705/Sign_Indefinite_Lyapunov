@@ -24,20 +24,21 @@ function ItsSchurCohn(A, B, K1, do_plot,r)
         figure;
 
         for i = 1:n
-            plot(real(eigvalues1(i)), imag(eigvalues1(i)), 'r*', 'MarkerSize', 10); hold on;
-            plot(real(eigvalues2(i)), imag(eigvalues2(i)), 'b.', 'MarkerSize', 10); hold on;
+            h1=plot(real(eigvalues1(i)), imag(eigvalues1(i)), 'r*', 'MarkerSize', 10); hold on;
+            h2=plot(real(eigvalues2(i)), imag(eigvalues2(i)), 'b.', 'MarkerSize', 10); hold on;
         end
 
-        plot(x, y, 'Color', [0.8 0.8 0.8]);
+        h3=plot(x, y, 'Color', [0.8 0.8 0.8]);
 
         if ~(nargin<5)
             x1 = r*cos(angles);
             y1 = r*sin(angles);
-            plot(x1, y1, 'm--'); hold on;
+            h4=plot(x1, y1, 'm--'); hold on;
             text(-0.12, 0.1+r, sprintf('r = %.2f', r), 'Color', 'm'); hold on;
-            legend('eig(A)', 'eig(A+BK1)', 'unit circle');
+            label=sprintf('$Circle (r = %.2f)$', r);
+            legend([h1 h2 h3 h4], {'$\lambda (A)$', '$\lambda (A+BK_1)$', 'Unit circle',label}, 'Interpreter','latex');
         else
-            legend('eig(A)', 'eig(A+BK1)');
+            legend([h1 h2 h3], {'$\lambda (A)$', '$\lambda (A+BK_1)$', 'Unit circle'}, 'Interpreter','latex');
         end
 
         axis equal;

@@ -1,4 +1,4 @@
-function [feas,sol]=Analysis_Regional(A,B,K1,K2,tal,relax,do_print,options)
+function [feas,sol]=Analysis_Regional(A,B,K1,K2,tal,do_print,relax,options)
     
     sol.K1=K1;
     sol.K2=K2;

@@ -4,7 +4,7 @@ function [u, u_sat, dz] = Saturation(x, K1, K2)
     u_sat = min(1, max(-1, u));
     dz = u - u_sat;
 
-    u = u + K2*dz;
+    u = K1*x + K2*dz;
     u_sat = min(1, max(-1, u));
     dz = u - u_sat;
 

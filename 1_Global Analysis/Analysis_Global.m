@@ -102,6 +102,9 @@ function [feas,sol]=Analysis_Global(A,B,K1,K2,do_print,relax,options)
         sol.T1 = dec2mat(LMIsys, LMIsol, T1);
     
         sol.P  = [sol.P0, sol.P1; sol.P1', sol.P2];
+
+        sol.H1=0;
+        sol.H2=0;
     
         %% Check Condition 1:
         

@@ -1,4 +1,4 @@
-function [feas,sol]=Synthesis_Global(A,B,r,do_print,relax,options)
+function [feas,sol]=YALMIP_Synthesis_Global(A,B,r,do_print,relax,options)
     
     [n,m] = size(B);
     Im = eye(m);

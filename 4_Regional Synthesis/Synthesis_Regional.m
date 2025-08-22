@@ -1,10 +1,10 @@
-function [feas,sol]=Synthesis_Regional(A,B,r,relax,do_print,options)
+function [feas,sol]=Synthesis_Regional(A,B,r,do_print,relax,options)
     
     [n,m] = size(B);
     Im = eye(m);
     In = eye(n);
 
-    if nargin < 4
+    if nargin < 5
         relax = [1e-20, 1e-20, 1e-20, 1e-20];
     end
 
@@ -86,6 +86,7 @@ function [feas,sol]=Synthesis_Regional(A,B,r,relax,do_print,options)
     % lmiterm([2 3 1 -M ],-1,1);
     
     lmiterm([2 4 1 Y1],-1,1);
+
     
     lmiterm([2 2 2 Q2],-1,1);
     lmiterm([2 2 2 Y2], 2,1,'s');
@@ -113,7 +114,7 @@ function [feas,sol]=Synthesis_Regional(A,B,r,relax,do_print,options)
     lmiterm([2 4 4 0],relax_cond2*Im);
     
     %Condition 3 (Aumentar velocidade resposta linear) - alocação polos (autovalores)
-    % |-alpha(M+M'-R)   * |<-relax_r*I<0
+    % |-r^2(M+M'-R)     * |<-relax_r*I<0
     % |  AM+BY1        -R |
     lmiterm([3 1 1 M ],r^2,-1,'s');
     lmiterm([3 1 1 R ],r^2, 1);
@@ -131,12 +132,13 @@ function [feas,sol]=Synthesis_Regional(A,B,r,relax,do_print,options)
     % |-Q1'-Y1     0    -Q2+2S-Y2-Y2'|
     lmiterm([-4 1 1 M ], 1,1,'s');
     lmiterm([-4 1 1 Q0],-1,1);
-    lmiterm([-4 1 1 0],-relax_Vhat*In);
+    lmiterm([-4 1 1 0 ],-relax_Vhat*In);
 
     lmiterm([-4 2 1 0],In);
 
     lmiterm([-4 3 1 -Q1],-1,1);
     lmiterm([-4 3 1  Y1],-1,1);
+    % lmiterm([-4 3 1  Z1], 1,1);
 
     lmiterm([-4 2 2 Phat],1,1);
     lmiterm([-4 2 2 0],-relax_Vhat*In);
@@ -144,8 +146,9 @@ function [feas,sol]=Synthesis_Regional(A,B,r,relax,do_print,options)
     lmiterm([-4 3 2 0],zeros(m,n));
 
     lmiterm([-4 3 3 Q2],-1,1);
-    lmiterm([-4 3 3 S ], 1,1,'s');
     lmiterm([-4 3 3 Y2],-1,1,'s');
+    lmiterm([-4 3 3 S ], 1,1,'s');
+    % lmiterm([-4 3 3 Z2], 1,1,'s');
     lmiterm([-4 3 3 0],-relax_Vhat*Im);
     
     %Q0>0
