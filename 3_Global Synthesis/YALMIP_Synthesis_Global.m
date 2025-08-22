@@ -48,19 +48,14 @@ function [feas,sol]=YALMIP_Synthesis_Global(A,B,r,do_print,relax,options)
     lmiterm([-1 2 2 0 ],-relax_cond1*Im); 
     
     % Condição 2 (deltaV<0)
-    % lmiterm([2 1 1 M ], A,1,'s');
-    % lmiterm([2 1 1 Y1], B,1,'s');
     lmiterm([2 1 1 Q0],-1,1);
     lmiterm([2 1 1 0 ],relax_cond2*In); 
 
     lmiterm([2 2 1 -Q1],-1,1);
     lmiterm([2 2 1  Y1], 2,1);
-    % lmiterm([2 2 1 -Y2], 1,B');
-    % lmiterm([2 2 1  S ],-1,B');
     
     lmiterm([2 3 1  M ], A,1);
     lmiterm([2 3 1  Y1], B,1);
-    % lmiterm([2 3 1 -M ],-1,1);
     
     lmiterm([2 4 1 Y1],-1,1);
    
@@ -89,7 +84,7 @@ function [feas,sol]=YALMIP_Synthesis_Global(A,B,r,do_print,relax,options)
     lmiterm([2 4 4 0 ],relax_cond2*Im);
     
 
-    %Condition 3 (Aumentar velocidade resposta linear) 
+    %Condition 3 (Speed linear behaviour) 
     % |-alpha(M+M'-R)     *   |<0
     % |  AM+BY1          -R   |
     lmiterm([3 1 1 M ],r^2,-1,'s');
@@ -113,7 +108,7 @@ function [feas,sol]=YALMIP_Synthesis_Global(A,B,r,do_print,relax,options)
 
     %% Solve
     LMIsys=getlmis;
-    feas = feasp(LMIsys);   % without otimisation
+    feas = feasp(LMIsys);   % without optimisation
 
     if round(feas,3) < 0
 
@@ -186,10 +181,10 @@ function [feas,sol]=YALMIP_Synthesis_Global(A,B,r,do_print,relax,options)
         end
 
     else
-        disp("Sistema infactível. Feas:");
+        disp("Unfeasible system. Feas:");
         disp(feas);
 
-        sol=0;
+        sol = 0;
     end
 
 end

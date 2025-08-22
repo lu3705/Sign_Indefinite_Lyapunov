@@ -32,7 +32,7 @@ function [feas,sol]=YALMIP_Analysis_Global(A,B,K1,K2,do_print,relax)
 
     constraints = [];
 
-    %% Condição 1 – V(x) > 0
+    %% Condition 1 – V(x) > 0
     cond1_11 = P0;
     cond1_21 = P1' - T*K1;
     cond1_22 = P2  - T*M2  - (T*M2)';
@@ -57,7 +57,7 @@ function [feas,sol]=YALMIP_Analysis_Global(A,B,K1,K2,do_print,relax)
     
     constraints = [constraints, cond2 <= -relax_cond2*eye(size(cond2))];
     
-    %% Condições de positividade
+    %% Conditions extras
     constraints = [constraints,
                    P0 >= 1e-4*In,
                    T  >= 1e-4*Im,
@@ -117,10 +117,10 @@ function [feas,sol]=YALMIP_Analysis_Global(A,B,K1,K2,do_print,relax)
         end
 
     else
-        disp("Sistema infactível. Feas:");
+        disp("Unfeasible system. Feas:");
         disp(feas);
 
-        sol=0;
+        sol = 0;
     end
 
 end

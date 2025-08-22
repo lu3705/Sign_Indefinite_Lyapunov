@@ -42,7 +42,7 @@ function [feas,sol]=Analysis_Regional(A,B,K1,K2,tal,do_print,relax,options)
     M1=A+B*K1;
     M2=K2-Im;
     
-    %Condição 1 (V>0 e inclusão)     (mesmo Sophie)
+    %Condition 1 (V>0 e inclusion)
     % |     P0                *               *  | 
     % |P1'+Z1-T1*K1   P2+He(Z2-T1(K2-Im))     *  | >relax_cond1*I>0
     % |     Z1i              Z2i           tal*ti| 
@@ -102,7 +102,7 @@ function [feas,sol]=Analysis_Regional(A,B,K1,K2,tal,do_print,relax,options)
     lmiterm([1 3 3 0],relax_cond2*Im)
   
     
-    % Condição 3 (maximiza área)
+    % Condição 3 (max area)
     % |Phat-P0       -(P1+K1'That)     | >relax_Vhat*I>0
     % |   *         -P2-He(That(K2-Im))|
     lmiterm([-2 1 1 Phat], 1,1);
@@ -127,7 +127,7 @@ function [feas,sol]=Analysis_Regional(A,B,K1,K2,tal,do_print,relax,options)
     lmiterm([-6 1 1 T3],1,1); 
     lmiterm([-7 1 1 That],1,1);
     
-    %Condição 0 (T-tal>0)            (mesmo Sophie)
+    %Condition (T-tal>0)
     lmiterm([-8 1 1 T1], 1 , 1);  
     lmiterm([-8 1 1 0 ],-tal*Im);
 
@@ -216,10 +216,10 @@ function [feas,sol]=Analysis_Regional(A,B,K1,K2,tal,do_print,relax,options)
         end
 
     else
-        disp("Sistema infactível. Feas:");
+        disp("Unfeasible system. Feas:");
         disp(feas);
 
-        sol=0;
+        sol = 0;
     end
 
 end

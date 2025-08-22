@@ -3,7 +3,7 @@ clear
 
 debug=0;
 
-% %Ex3 (Discretização do Exemplo 2 de [0]Sophie)
+% %Ex3 (Example 2 - [1])
 Ac=[0 1 ; 1 0];
 Bc=[0;-5];
 wn=4;
@@ -12,7 +12,7 @@ wn=4;
 % Bc=[-1;1];
 % wn=8;
 
-% Pendulo invertido
+% Pendulum inverse
 % g=9.81; l=0.5; m=0.15;
 % mi=0.05; talb=5; dt=0.02;
 % A=[1 dt 0; g*dt/l 1-(mi*dt/(m*l^2)) 0; 1 0 1];

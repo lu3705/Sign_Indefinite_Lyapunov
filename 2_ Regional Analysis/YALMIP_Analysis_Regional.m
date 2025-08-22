@@ -71,7 +71,7 @@ function [feas,sol]=YALMIP_Analysis_Regional(A,B,K1,K2,tal,do_print,relax)
   
     constraints = [constraints, cond2 <= -relax_cond2*eye(size(cond2))];
 
-    %% Condição 3 – Maximizar região (Phat)
+    %% Condição 3 – Max area (Phat)
     cond3_11= Phat-P0;
     cond3_21=-(P1' + That*K1);
     cond3_22=-(P2  + That*M2 + (That*M2)' );
@@ -167,10 +167,10 @@ function [feas,sol]=YALMIP_Analysis_Regional(A,B,K1,K2,tal,do_print,relax)
         end
 
     else
-        disp("Sistema infactível. Feas:");
+        disp("Unfeasible system. Feas:");
         disp(feas);
 
-        sol=0;
+        sol = 0;
     end
 
 end

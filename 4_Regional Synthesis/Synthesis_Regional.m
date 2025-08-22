@@ -8,10 +8,10 @@ function [feas,sol]=Synthesis_Regional(A,B,r,do_print,relax,options)
         relax = [1e-20, 1e-20, 1e-20, 1e-20];
     end
 
-    relax_cond1=relax(1);
-    relax_cond2=relax(2);
-    relax_r =relax(3);
-    relax_Vhat=relax(4);
+    relax_cond1 = relax(1);
+    relax_cond2 = relax(2);
+    relax_r = relax(3);
+    relax_Vhat = relax(4);
 
     if nargin < 6
         options = [0,0,0,0,0];
@@ -21,26 +21,26 @@ function [feas,sol]=Synthesis_Regional(A,B,r,do_print,relax,options)
 
     setlmis([]);
 
-    R =lmivar(1,[n,1]);
+    R  = lmivar(1,[n,1]);
     
-    Q0=lmivar(1,[n,1]);
-    Q1=lmivar(2,[n,m]);
-    Q2=lmivar(1,[m,1]); 
+    Q0 = lmivar(1,[n,1]);
+    Q1 = lmivar(2,[n,m]);
+    Q2 = lmivar(1,[m,1]); 
     
-    S =lmivar(1,[m,1]);
-    M =lmivar(2,[n,n]);
+    S  = lmivar(1,[m,1]);
+    M  = lmivar(2,[n,n]);
     
-    Y1=lmivar(2,[m,n]);
-    Y2=lmivar(2,[m,m]);
+    Y1 = lmivar(2,[m,n]);
+    Y2 = lmivar(2,[m,m]);
     
-    Phat=lmivar(1,[n,1]);
+    Phat = lmivar(1,[n,1]);
     
-    Z1=lmivar(2,[m,n]);
-    Z2=lmivar(2,[m,m]);
+    Z1 = lmivar(2,[m,n]);
+    Z2 = lmivar(2,[m,m]);
     
     %% Conditions 
     
-    %Condição 1 (V>0)  (mesmo Sophie)
+    %Condition 1 (V>0)
     % |Q0     Q1+Z1'-Y1'   Z1i'|
     % | *  Q2+He(Z2-Y2+S)  Z2i'| >0
     % | *        *          1  |
@@ -69,21 +69,16 @@ function [feas,sol]=Synthesis_Regional(A,B,r,do_print,relax,options)
         lmiterm([idx 3 3 0],-relax_cond1*Im);
     end
     
-    %Condição 2 (deltaV<0)
-    % lmiterm([2 1 1 M ], A,1,'s');
-    % lmiterm([2 1 1 Y1], B,1,'s');
+    %Condition 2 (deltaV<0)
     lmiterm([2 1 1 Q0],-1,1);
     lmiterm([2 1 1 0],relax_cond2*In);
 
     lmiterm([2 2 1 -Q1],-1,1);
     lmiterm([2 2 1  Y1], 2,1);
     lmiterm([2 2 1  Z1],-1,1);
-    % lmiterm([2 2 1 -Y2], 1,B');
-    % lmiterm([2 2 1  S ],-1,B');
     
     lmiterm([2 3 1 M ], A,1);
     lmiterm([2 3 1 Y1], B,1);
-    % lmiterm([2 3 1 -M ],-1,1);
     
     lmiterm([2 4 1 Y1],-1,1);
 
@@ -113,7 +108,7 @@ function [feas,sol]=Synthesis_Regional(A,B,r,do_print,relax,options)
     lmiterm([2 4 4 Q2], 1,1);
     lmiterm([2 4 4 0],relax_cond2*Im);
     
-    %Condition 3 (Aumentar velocidade resposta linear) - alocação polos (autovalores)
+    %Condition 3 (Speed linear behaviour) 
     % |-r^2(M+M'-R)     * |<-relax_r*I<0
     % |  AM+BY1        -R |
     lmiterm([3 1 1 M ],r^2,-1,'s');
@@ -126,7 +121,7 @@ function [feas,sol]=Synthesis_Regional(A,B,r,do_print,relax,options)
     lmiterm([3 2 2 R ],-1,1);
     lmiterm([3 2 2 0],relax_r*In);
     
-    % Condição 4 (maximiza área)
+    % Condição 4 (max area)
     % |M+M'-Q0     *           *     | >tal*I>0
     % |  In       Phat         *     |
     % |-Q1'-Y1     0    -Q2+2S-Y2-Y2'|
@@ -138,7 +133,6 @@ function [feas,sol]=Synthesis_Regional(A,B,r,do_print,relax,options)
 
     lmiterm([-4 3 1 -Q1],-1,1);
     lmiterm([-4 3 1  Y1],-1,1);
-    % lmiterm([-4 3 1  Z1], 1,1);
 
     lmiterm([-4 2 2 Phat],1,1);
     lmiterm([-4 2 2 0],-relax_Vhat*In);
@@ -148,7 +142,6 @@ function [feas,sol]=Synthesis_Regional(A,B,r,do_print,relax,options)
     lmiterm([-4 3 3 Q2],-1,1);
     lmiterm([-4 3 3 Y2],-1,1,'s');
     lmiterm([-4 3 3 S ], 1,1,'s');
-    % lmiterm([-4 3 3 Z2], 1,1,'s');
     lmiterm([-4 3 3 0],-relax_Vhat*Im);
     
     %Q0>0
@@ -273,7 +266,7 @@ function [feas,sol]=Synthesis_Regional(A,B,r,do_print,relax,options)
         end
 
     else
-        disp("Sistema infactível. Feas:");
+        disp("Unfeasible system. Feas:");
         disp(feas);
     end
 

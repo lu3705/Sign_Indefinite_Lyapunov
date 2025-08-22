@@ -5,6 +5,8 @@ This repository contains the code developed during my internship project on the 
 
 The project develops a discrete-time formulation for systems with input saturation, using **sign-indefinite quadratic Lyapunov functions**. By combining this approach with the **S-procedure** and **Linear Matrix Inequalities (LMIs)**, the framework provides conditions to analyze both **global** and **regional stability**, and to design stabilizing controllers in each case. This formulation reduces conservatism compared to standard quadratic Lyapunov methods, while ensuring asymptotic stability.
 
+[1] Isabelle Queinnec et al. "Design of Saturating State Feedback With Sign-Indefinite Quadratic Forms." *IEEE Transactions on Automatic Control*, vol. 67, no. 7, 2022, pp. 3507–3520. doi: [10.1109/TAC.2021.3106878](https://doi.org/10.1109/TAC.2021.3106878)
+
 ---
 
 ## Repository Structure
@@ -14,23 +16,22 @@ The code is organized into four main cases (each case has the same internal stru
 1. **Global Analysis**  
    - `Analysis_Global/` : MATLAB (LMILAB) solver implementation  
    - `YALMIP_Analysis_Global/` : YALMIP-based solver  
-   - `global_analysis_discret.m` : example script demonstrating usage  
+   - `example_analysis_global.m` : example script demonstrating usage  
 
-2. **Regional Analysis**  
-   - `Analysis_Regional/`  
-   - `YALMIP_Analysis_Regional/`  
-   - `regional_analysis_discret.m`  
+2. **Regional Analysis**
+   - `Analysis_Regional/`
+   - `YALMIP_Analysis_Regional/`
+   - `example_regional_analysis.m`
 
-3. **Global Synthesis**  
-   - `Synthesis_Global/`  
-   - `YALMIP_Synthesis_Global/`  
-   - `global_synthesis_discret.m`  
+3. **Global Synthesis**
+   - `Synthesis_Global/`
+   - `YALMIP_Synthesis_Global/`
+   - `example_global_synthesis.m`
 
-4. **Regional Synthesis**  
-   - `Synthesis_Regional/`  
-   - `YALMIP_Synthesis_Regional/`  
-   - `regional_synthesis_discret.m`  
-
+4. **Regional Synthesis**
+   - `Synthesis_Regional/`
+   - `YALMIP_Synthesis_Regional/`
+   - `example_regional_synthesis.m`
 ---
 
 ## Auxiliary functions
@@ -39,10 +40,10 @@ The folder `Auxiliary_function/` contains helper scripts used across all analysi
 
 - `Discretize.m` – converts continuous-time models to discrete-time representation.  
 - `ItssChurCohn.m` – checks the Schur–Cohn criterion for discrete-time stability.  
-- `PlotGlobal.m` – plots results of the global stability analysis.  
-- `PlotPhasePlan.m` – plots the phase plane for a given system.  
-- `PlotPhasePlanGlobal.m` – plots the phase plane specifically for the global case.  
-- `PlotRegional.m` – plots results of the regional stability analysis.  
+- `PlotGlobal.m` – plots results of the global stability analysis.
+- `PlotRegional.m` – plots results of the regional stability analysis.
+- `PlotPhasePlanRegional.m` – plots the phase plane for the regional case. 
+- `PlotPhasePlanGlobal.m` – plots the phase plane for the global case.  
 - `Saturation.m` – defines the symmetric saturation and dead-zone functions.  
 
 ---
@@ -58,6 +59,3 @@ The folder `Auxiliary_function/` contains helper scripts used across all analysi
 2. Add folders to the path (example):  
    ```matlab
    addpath(genpath('Auxiliary_function'));
-
-
-[1] Isabelle Queinnec et al. "Design of Saturating State Feedback With Sign-Indefinite Quadratic Forms." *IEEE Transactions on Automatic Control*, vol. 67, no. 7, 2022, pp. 3507–3520. doi: [10.1109/TAC.2021.3106878](https://doi.org/10.1109/TAC.2021.3106878)

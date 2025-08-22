@@ -11,20 +11,20 @@ bm=0.1; Km=0.01; Kb=0.01;
 Ac = [-bm/J  -Km/J; Kb/La -Ra/La];
 Bc = [0;1/La];
 
-wBW=11;
+wBW = 11;
 
 %% Discretize
 
 %Frequence minimal
 fBW = wBW/(2*pi);
-Ts = 1/(2*fBW);  %Ts precisa ser menor do que isso
+Ts  = 1/(2*fBW);  
 
 
 [A,B] = Discretize(Ac,Bc,Ts,debug);
 
 %% LMI
 
-r = 0.1; %maximo 1
+r = 0.1; %max 1
 [feas,sol] = YALMIP_Synthesis_Global(A,B,r,debug, [1e-4, 1e-4, 1e-4]);
 
 

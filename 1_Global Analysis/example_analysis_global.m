@@ -21,11 +21,11 @@ K2=-0.2246;
 
 %Frequence minimal
 fn = wn/(2*pi);
-Ts = 1/(2*fn);          %%valor maximo de Ts
+Ts = 1/(2*fn);          %%max value of Ts
 
 [A,B] = Discretize(Ac,Bc,Ts,debug);
 
-%% Check if it's Schur Cohn
+%% Check if it is Schur Cohn
 
 ItsSchurCohn(A, B, K1,debug);
 

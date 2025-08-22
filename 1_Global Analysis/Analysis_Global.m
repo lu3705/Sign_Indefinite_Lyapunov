@@ -22,21 +22,21 @@ function [feas,sol]=Analysis_Global(A,B,K1,K2,do_print,relax,options)
     
     setlmis([]);
 
-    P0=lmivar(1,[n,1]);
-    P1=lmivar(2,[n,m]);
-    P2=lmivar(1,[m,1]);
+    P0 = lmivar(1,[n,1]);
+    P1 = lmivar(2,[n,m]);
+    P2 = lmivar(1,[m,1]);
     
-    T =lmivar(1,[m,1]);
-    T3=lmivar(1,[m,1]);
-    T2=lmivar(1,[m,1]);
-    T1=lmivar(1,[m,1]);
+    T  = lmivar(1,[m,1]);
+    T3 = lmivar(1,[m,1]);
+    T2 = lmivar(1,[m,1]);
+    T1 = lmivar(1,[m,1]);
 
     %% Conditions 
 
     M1 = A+B*K1;
     M2 = K2-Im;
     
-    %Condition 1 (V > 0) – msm Sophie
+    %Condition 1 (V > 0)
     %|  P0             *       | >relax_cond1*I>0
     %|P1'-TK1   P2-He(T(K2-Im))|    
     lmiterm([-1 1 1 P0],1,1);
@@ -79,7 +79,7 @@ function [feas,sol]=Analysis_Global(A,B,K1,K2,do_print,relax,options)
     %P0>0
     lmiterm([-3 1 1 P0],1,1);
     
-    %Ts>0
+    %T's>0
     lmiterm([-4 1 1 T ],1,1);
     lmiterm([-5 1 1 T3],1,1);
     lmiterm([-6 1 1 T2],1,1);
@@ -87,7 +87,7 @@ function [feas,sol]=Analysis_Global(A,B,K1,K2,do_print,relax,options)
 
     %% Solve
     LMIsys = getlmis;
-    feas = feasp(LMIsys);  % without otimisation
+    feas = feasp(LMIsys);  % without optimisation
 
     if round(feas,3) < 0
 
@@ -103,8 +103,8 @@ function [feas,sol]=Analysis_Global(A,B,K1,K2,do_print,relax,options)
     
         sol.P  = [sol.P0, sol.P1; sol.P1', sol.P2];
 
-        sol.H1=0;
-        sol.H2=0;
+        sol.H1 = 0;
+        sol.H2 = 0;
     
         %% Check Condition 1:
         
@@ -114,7 +114,7 @@ function [feas,sol]=Analysis_Global(A,B,K1,K2,do_print,relax,options)
         
         sol.cond1 = [cond1_11, cond1_21';
                      cond1_21, cond1_22];
-        sol.eig1 = eig(sol.cond1);
+        sol.eig1  = eig(sol.cond1);
 
         %% Check Condition 2:
         cond2_11 = M1'* sol.P0 *M1 - sol.P0;
@@ -127,7 +127,7 @@ function [feas,sol]=Analysis_Global(A,B,K1,K2,do_print,relax,options)
         sol.cond2 = [cond2_11, cond2_21', cond2_31';
                      cond2_21, cond2_22 , cond2_32';
                      cond2_31, cond2_32 , cond2_33];
-        sol.eig2 = eig(sol.cond2);
+        sol.eig2  = eig(sol.cond2);
 
         %% Print conditions
 
@@ -137,10 +137,10 @@ function [feas,sol]=Analysis_Global(A,B,K1,K2,do_print,relax,options)
         end
 
     else
-        disp("Sistema infactível. Feas:");
+        disp("Unfeasible system. Feas:");
         disp(feas);
 
-        sol=0;
+        sol = 0;
     end
 
 end

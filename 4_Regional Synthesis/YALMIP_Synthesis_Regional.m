@@ -8,10 +8,10 @@ function [feas, sol] = YALMIP_Synthesis_Regional(A, B, r, do_print,relax)
         relax = [1e-20, 1e-20, 1e-20, 1e-20];
     end
 
-    relax_cond1=relax(1);
-    relax_cond2=relax(2);
-    relax_r =relax(3);
-    relax_Vhat=relax(4);
+    relax_cond1 = relax(1);
+    relax_cond2 = relax(2);
+    relax_r = relax(3);
+    relax_Vhat  = relax(4);
 
     %% Variables
 
@@ -34,27 +34,27 @@ function [feas, sol] = YALMIP_Synthesis_Regional(A, B, r, do_print,relax)
     
     constraints = [];
 
-    %% Condição 1 – V(x) > 0
+    %% Condition 1 – V(x) > 0
 
-    cond1_11= Q0;
-    cond1_21= Q1' + Z1 - Y1;
-    cond1_22= Q2  + Z2 + Z2' -  Y2  -  Y2' + 2*S;
+    cond1_11 = Q0;
+    cond1_21 = Q1' + Z1 - Y1;
+    cond1_22 = Q2  + Z2 + Z2' -  Y2  -  Y2' + 2*S;
 
     for i = 1:m
-        line=zeros(m,1); line(i)=1;
+        line = zeros(m,1); line(i)=1;
 
-        cond1_31= line'*Z1;
-        cond1_32= line'*Z2;
-        cond1_33= 1;
+        cond1_31 = line'*Z1;
+        cond1_32 = line'*Z2;
+        cond1_33 = 1;
         
-        cond1=[cond1_11, cond1_21', cond1_31';
+        cond1 = [cond1_11, cond1_21', cond1_31';
                cond1_21, cond1_22 , cond1_32';
                cond1_31, cond1_32 , cond1_33];
         
         constraints = [constraints, cond1 >= relax_cond1*eye(size(cond1))];
     end
 
-    %% Condição 2 – △V(x) < 0
+    %% Condition 2 – △V(x) < 0
     cond2_11 = -Q0;
     cond2_21 = -Q1' +  2*Y1 -  Z1; 
     cond2_31 = A*M  +  B*Y1;
@@ -66,24 +66,24 @@ function [feas, sol] = YALMIP_Synthesis_Regional(A, B, r, do_print,relax)
     cond2_43 =  Q1' +  Y1;
     cond2_44 =  Q2  +  Y2   +  Y2'  - 2*S;
     
-    cond2=[cond2_11, cond2_21', cond2_31' , cond2_41';
+    cond2 = [cond2_11, cond2_21', cond2_31' , cond2_41';
            cond2_21, cond2_22 , cond2_32' , cond2_42';
            cond2_31, cond2_32 , cond2_33  , cond2_43';
            cond2_41, cond2_42 , cond2_43  , cond2_44];
 
     constraints = [constraints, cond2 <= -relax_cond2*eye(size(cond2))];
 
-    %% Condição 3 – Alocação de polos (decay rate)
+    %% Condition 3 – Decay rate
     cond3_11 = -r^2*(M  + M'- R);
     cond3_21 = A*M + B*Y1; 
     cond3_22 = -R;
     
-    cond3=[cond3_11, cond3_21';
+    cond3 = [cond3_11, cond3_21';
            cond3_21, cond3_22];
 
     constraints = [constraints, cond3 <= -relax_r*eye(size(cond3))];
 
-    %% Condição 4 – Maximizar região (Phat)
+    %% Condition 4 – Max area (Phat)
     cond4_11 =  M   + M'  - Q0;
     cond4_21 = In;
     cond4_31 = -Q1' - Y1 ; %+ Z1
@@ -97,7 +97,7 @@ function [feas, sol] = YALMIP_Synthesis_Regional(A, B, r, do_print,relax)
 
     constraints = [constraints, cond4 >= relax_Vhat*eye(size(cond4))];
 
-    % Condições de positividade
+    % Conditons
     constraints = [constraints,
                    Q0   >= 1e-4*In,
                    S    >= 1e-4*Im,
@@ -165,20 +165,20 @@ function [feas, sol] = YALMIP_Synthesis_Regional(A, B, r, do_print,relax)
         cond2_43 =  sol.Q1' +  sol.Y1;
         cond2_44 =  sol.Q2  +  sol.Y2   +  sol.Y2'  - 2*sol.S;
         
-        sol.cond2=[cond2_11, cond2_21', cond2_31' , cond2_41';
+        sol.cond2 = [cond2_11, cond2_21', cond2_31' , cond2_41';
                    cond2_21, cond2_22 , cond2_32' , cond2_42';
                    cond2_31, cond2_32 , cond2_33  , cond2_43';
                    cond2_41, cond2_42 , cond2_43  , cond2_44];
-        sol.eig2=eig(sol.cond2);
+        sol.eig2  = eig(sol.cond2);
         
         %% Check Condition 3 (r):
         cond3_11 = -r^2*(sol.M  + sol.M'- sol.R);
         cond3_21 = A*sol.M + B*sol.Y1; 
         cond3_22 = -sol.R;
         
-        sol.cond3=[cond3_11, cond3_21';
+        sol.cond3 = [cond3_11, cond3_21';
                    cond3_21, cond3_22];
-        sol.eig3=eig(sol.cond3);
+        sol.eig3  = eig(sol.cond3);
 
         %% Check Condition 4 (Vhat)
         cond4_11 =  sol.M   + sol.M'  - sol.Q0;
@@ -188,10 +188,10 @@ function [feas, sol] = YALMIP_Synthesis_Regional(A, B, r, do_print,relax)
         cond4_32 = zeros(m,n);
         cond4_33 =-sol.Q2   + 2*sol.S - sol.Y2 - sol.Y2'; %+ sol.Z2+ sol.Z2'
         
-        sol.cond4=[cond4_11, cond4_21', cond4_31';
+        sol.cond4 = [cond4_11, cond4_21', cond4_31';
                    cond4_21, cond4_22 , cond4_32';
                    cond4_31, cond4_32 , cond4_33];
-        sol.eig4=eig(sol.cond4);
+        sol.eig4  = eig(sol.cond4);
 
         %% Print conditions
 
@@ -205,7 +205,7 @@ function [feas, sol] = YALMIP_Synthesis_Regional(A, B, r, do_print,relax)
         end
 
     else
-        disp("Sistema infactível. Feas:");
+        disp("Unfeasible system. Feas:");
         disp(feas);
     end
 

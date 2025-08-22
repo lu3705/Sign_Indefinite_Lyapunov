@@ -1,4 +1,12 @@
-function [A,B,Ts]=Discretize(Ac,Bc,Ts,do_plot)
+% Discretize: converts continuous-time system (Ac, Bc) into discrete-time (A, B)
+% Inputs:
+%   Ac, Bc   - continuous-time system matrices
+%   Ts       - sampling period
+%   do_plot  - (optional) if true, plots Bode magnitude of continuous vs. discrete
+% Outputs:
+%   A, B     - discrete-time system matrices
+
+function [A,B]=Discretize(Ac,Bc,Ts,do_plot)
 
     if nargin < 4
         do_plot = 0;
